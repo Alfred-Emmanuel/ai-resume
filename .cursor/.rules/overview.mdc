@@ -1,0 +1,40 @@
+---
+alwaysApply: false
+---
+## 3) Personas & user stories
+
+**Personas**
+
+* Early-career graduate: needs help translating internships to relevant skills.
+* Career shifter: wants to highlight transferrable skills.
+* Senior professional: needs concise, tailored CV for executive roles.
+
+**Core user stories**
+
+* As a user, I can upload my master resume and edit my profile (skills, summary).
+* As a user, when I view a job posting, I can click the extension and generate a tailored resume.
+* As a user, I can download the resume as PDF or DOCX.
+* As a user, I can generate a cover letter tuned to the same job.
+* As an admin, I can view usage analytics and subscription revenue.
+
+---
+
+## 4) MVP scope (minimum to release value)
+
+**MVP features**
+
+* Website: sign up / sign in, upload master resume (PDF/DOCX), profile editor.
+* Browser extension (Chrome Manifest V3): detect job description text on LinkedIn & Indeed (initial), send job description to API, present "Generate Resume / Cover Letter" UI, return downloadable files.
+* Backend: authenticated API, resume parsing to canonical schema, LLM-based generation (prompt + safety), DOCX & PDF exporter.
+* Payments: Stripe integration (basic subscriptions & usage limits), webhook support.
+* Storage: S3-compatible storage for user files, presigned download.
+* Dashboard: history of generated resumes and files.
+
+**Out of scope for MVP**
+
+* Multi-language generation (non-English) — optional future.
+* Direct integrations with ATS vendors.
+* On-device/edge LLMs.
+* Heavy enterprise admin features.
+
+---

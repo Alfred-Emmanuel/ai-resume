@@ -1,0 +1,76 @@
+---
+alwaysApply: false
+---
+## 7) Resume parsing & canonical format
+
+**Accepted upload formats:** PDF, DOCX (support plain text fallback). For best results ask users to upload a text-based PDF / docx.
+
+**Parsing pipeline (MVP)**
+
+1. Upload file → store in S3.
+2. Extract text: use a robust PDF text extractor (pdfplumber / pdfminer / Apache Tika) and docx parser (mammoth / python-docx or docx npm package).
+3. Apply heuristics + LLM to split into sections: Contact, Summary, Experience\[], Education\[], Skills\[], Certifications\[], Projects\[].
+4. Normalize dates, roles, company names.
+5. Save canonical JSON (example below).
+
+**Canonical resume JSON example**
+
+```json
+{
+  "contact": {"name":"Jane Doe","email":"jane@example.com","phone":"+1...","location":"City, Country"},
+  "summary": "Product manager with 5 years...",
+  "experience": [
+    {"company":"ACME","title":"Product Manager","start":"2019-03","end":"2022-08","bullets":["Led X","Improved Y by 30%"],"location":"City"}
+  ],
+  "skills": ["React","SQL","Product Strategy"],
+  "education":[{"degree":"BSc","school":"University","year":"2018"}]
+}
+```
+
+Store both raw text and structured JSON for generation.
+
+---
+
+## 8) Job description ingestion & normalization
+
+**Content sources:** LinkedIn, Indeed, Glassdoor, company careers pages. Start with LinkedIn & Indeed for MVP.
+
+**Scraping strategy:**
+
+* Content script reads visible page DOM and extracts job title, company, location, and description text.
+* Sanitize & trim HTML tags; keep bullet lists and responsibilities.
+* Normalize common fields via regex and LLM assistance.
+
+**Important legal note:** review each site’s Terms of Service for scraping. For LinkedIn, extensive automated scraping may violate TOS. Keep extension behavior limited to user-initiated copy/paste or DOM-read from the client side — do not proxy scraping through your servers without permission. Prefer client-side extraction in the extension and send job text to backend only with user explicit action.
+
+---
+
+## 9) ATS optimization strategy
+
+**Key elements for ATS compliance**
+
+* Use simple, linear structure: sections in conventional order (Contact → Summary → Experience → Education → Skills).
+* Avoid images, headers/footers with important text, text embedded in images, and complex tables.
+* Use common section headings ("Work Experience", "Education", "Skills").
+* Use standard fonts (Arial, Calibri), >=10pt.
+
+**Keyword strategy**
+
+1. Extract keywords from job description (skills, technologies, certifications, verbs, soft skills).  Use regex + simple NLP (noun phrase chunking) + LLM verification.
+2. Score master resume for keyword match rate.
+3. Recommend/generate phrasing to incorporate missing keywords where truthful (e.g., show similar past responsibilities using the job’s verbs).
+4. Respect honesty: never invent dates or employers; only rephrase or emphasize transferable skills.
+
+**Implementation options**
+
+* Heuristic matching (lower-cost): TF-IDF or token overlap.
+* Embedding-based matching (better semantics): use sentence embeddings (OpenAI / S-BERT) to map job bullets to experience bullets.
+* Hybrid: heuristics + embeddings for ranking.
+
+**Keyword insertion rules**
+
+* Prefer mapping existing achievements to job keywords.
+* If a skill is missing but the user has related experience, craft a bullet that highlights the related responsibility.
+* For strictly missing and unverifiable skills (e.g., a programming language they never used), flag a suggestion to the user rather than insert as fact.
+
+---

@@ -1,0 +1,70 @@
+---
+alwaysApply: false
+---
+
+# AI Resume & Cover Letter Generation
+
+Prompt design, ATS optimization, and document formatting...
+
+
+**Resume-tailor prompt (short)**
+
+```
+You are an expert resume writer. Use the provided candidate canonical JSON and job requirements to: 1) Reorder and rephrase candidate's experience to align with job responsibilities; 2) Produce 6-10 concise achievement bullets per role max; 3) Produce an "ATS-safe" plain text resume; 4) Do NOT invent companies, titles, or dates. Output JSON with `formatted_text` and `sections`.
+```
+
+**Cover letter prompt (short)**
+
+```
+Write a 3-paragraph cover letter for [ROLE] at [COMPANY]. Use candidate summary and 3 achievements. Keep it 200-300 words and include a call-to-action.
+```
+
+**Hallucination guard prompt (validation)**
+
+```
+Given candidate canonical JSON and generated_text, verify: no new employers/dates, all listed employers appear in canonical JSON. If violations exist, return list of issues and rewrite instructions.
+```
+
+---
+**Embeddings & vector DB**
+
+* Use embeddings for semantic matching: store experience bullet embeddings and query with job requirement embeddings for best-match bullets.
+
+**Hallucination mitigation patterns**
+
+* Post-generation validation pass (rules-based and LLM-based).
+* Use deterministic few-shot prompts and include a strict "do not invent" instruction.
+* Provide transparency UI that highlights what was changed.
+# AI Resume & Cover Letter Generation
+
+Prompt design, ATS optimization, and document formatting...
+
+
+**Resume-tailor prompt (short)**
+
+```
+You are an expert resume writer. Use the provided candidate canonical JSON and job requirements to: 1) Reorder and rephrase candidate's experience to align with job responsibilities; 2) Produce 6-10 concise achievement bullets per role max; 3) Produce an "ATS-safe" plain text resume; 4) Do NOT invent companies, titles, or dates. Output JSON with `formatted_text` and `sections`.
+```
+
+**Cover letter prompt (short)**
+
+```
+Write a 3-paragraph cover letter for [ROLE] at [COMPANY]. Use candidate summary and 3 achievements. Keep it 200-300 words and include a call-to-action.
+```
+
+**Hallucination guard prompt (validation)**
+
+```
+Given candidate canonical JSON and generated_text, verify: no new employers/dates, all listed employers appear in canonical JSON. If violations exist, return list of issues and rewrite instructions.
+```
+
+---
+**Embeddings & vector DB**
+
+* Use embeddings for semantic matching: store experience bullet embeddings and query with job requirement embeddings for best-match bullets.
+
+**Hallucination mitigation patterns**
+
+* Post-generation validation pass (rules-based and LLM-based).
+* Use deterministic few-shot prompts and include a strict "do not invent" instruction.
+* Provide transparency UI that highlights what was changed.

@@ -1,0 +1,7 @@
+
+> @ai-resume/utils@0.1.0 build C:\Users\PC\ai-resume-app\packages\utils
+> tsc -p tsconfig.json
+
+src/index.ts(21,38): error TS2339: Property 'error' does not exist on type '{}'.
+src/index.ts(21,52): error TS2339: Property 'message' does not exist on type '{}'.
+ ELIFECYCLE  Command failed with exit code 2.

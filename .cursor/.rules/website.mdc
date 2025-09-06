@@ -1,0 +1,76 @@
+---
+alwaysApply: false
+---
+
+# Website Design
+
+Website onboarding, subscription, and dashboard features...
+
+## 19) UX, onboarding & product flows
+
+**Onboarding steps**
+
+1. Sign up & verify email.
+2. Upload master resume.
+3. Quick profile fill (skills, role preference, location).
+4. Install extension with clear permission guidance.
+5. Guided "generate first resume" walkthrough.
+
+**In-app tips**
+
+* Show "why this change" explanations when the AI rewrites bullets (in-line suggestions).
+* Allow users to accept/reject each suggested bullet before final generation.
+
+---
+
+## Features
+- Landing page & onboarding  
+- Resume upload  
+- Dashboard (saved resumes, job applications)  
+- Subscription & billing (Stripe/Paystack)  
+
+## Framework
+Next.js + TailwindCSS + shadcn/ui  
+
+## State Management
+- React Query for API calls  
+- Context API for auth  
+
+## Hosting
+Vercel  
+# Website Design
+
+Website onboarding, subscription, and dashboard features...
+
+## 19) UX, onboarding & product flows
+
+**Onboarding steps**
+
+1. Sign up & verify email.
+2. Upload master resume.
+3. Quick profile fill (skills, role preference, location).
+4. Install extension with clear permission guidance.
+5. Guided "generate first resume" walkthrough.
+
+**In-app tips**
+
+* Show "why this change" explanations when the AI rewrites bullets (in-line suggestions).
+* Allow users to accept/reject each suggested bullet before final generation.
+
+---
+
+## Features
+- Landing page & onboarding  
+- Resume upload  
+- Dashboard (saved resumes, job applications)  
+- Subscription & billing (Stripe/Paystack)  
+
+## Framework
+Next.js + TailwindCSS + shadcn/ui  
+
+## State Management
+- React Query for API calls  
+- Context API for auth  
+
+## Hosting
+Vercel  

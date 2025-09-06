@@ -1,0 +1,25 @@
+# Payments & Subscription
+
+Integration with Stripe/Paystack, subscription tiers, webhooks...
+
+## 14) Payments & subscription model
+
+**Billing models**
+
+* Subscription tiers (e.g., Free, Pro, Premium). Free has limited monthly generations.
+* Per-generation credits or pay-as-you-go for heavy usage.
+
+**Integrations**
+
+* Stripe for global payments, Paystack for Nigerian/Africa users.
+* Webhook handling for subscription updates and billing events.
+
+**Enforcement**
+
+* Quotas enforced at API layer; record usage events and decrement user credits in DB transactionally.
+
+---
+**Feature: Payment & quota enforcement**
+
+* User on Free tier cannot generate more than X per month.
+* Billing webhooks update DB within 5 minutes of provider event.

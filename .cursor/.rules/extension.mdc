@@ -1,0 +1,35 @@
+# Browser Extension Design
+
+How the extension scrapes job postings, communicates with backend, and displays UI...
+
+## 12) Extension technical design
+
+**Architecture**
+
+* Content script: extracts job details from DOM.
+* Popup UI: React app that calls background script / extension backend.
+* Background script: manages auth tokens (OAuth/JWT), handles requests from popup, calls your backend API.
+
+**Auth flow**
+
+* MFA / OAuth via website: extension opens website OAuth flow, stores JWT in extension storage.
+* Avoid storing plaintext credentials.
+
+**Permissions**
+
+* Minimal required: `activeTab`, limited host permissions (optionally allow user to grant per-site access).
+
+**UX**
+
+* Popup presents job title/company prefilled, buttons: \[Generate Resume] \[Generate Cover Letter] \[Preview] \[Save to Account].
+* Show a short checklist of ATS fixes being applied.
+
+**Cross-browser**
+
+* Build with standard WebExtensions API; pack for Chrome & Firefox.
+
+**Edge cases**
+
+* If page uses client-side rendering or lazy-load, content script must wait for DOM nodes or offer a "select text" fallback where user copies job text into popup.
+
+---

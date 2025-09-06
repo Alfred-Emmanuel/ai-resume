@@ -1,0 +1,4 @@
+
+> @ai-resume/types@0.1.0 build C:\Users\PC\ai-resume-app\packages\types
+> tsc -p tsconfig.json
+

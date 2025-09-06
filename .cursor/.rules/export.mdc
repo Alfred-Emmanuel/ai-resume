@@ -1,0 +1,18 @@
+# Resume Export
+
+Exporting resumes and cover letters to PDF/DOCX formats...
+
+# Resume Export
+
+## Formats
+- PDF  
+- DOCX  
+
+## Approach
+- Generate structured HTML → convert to PDF/DOCX.  
+- Templates for consistency.  
+
+## Flow
+1. AI generates tailored content.  
+2. Renderer formats into exportable file.  
+3. File returned to frontend/extension.  

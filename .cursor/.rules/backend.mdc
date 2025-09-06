@@ -1,0 +1,57 @@
+---
+alwaysApply: false
+---
+## 13) Authentication & Authorization
+
+**User flows**
+* Using Firebase Auth for everything related to Authentication and Authorization 
+* Signup: email/password + email verification.
+* Social logins (Google, LinkedIn, Github) as optional conveniences.
+* Token-based backend authentication (JWT with refresh tokens).
+* Extension authenticates with access token stored securely.
+
+**Admin roles**
+
+* Admin user to view analytics, manage plans, refund & revoke subscriptions.
+
+**Security**
+
+* Use OAuth best practices, rotate keys, store secrets in vault (AWS Secrets Manager / GCP Secret Manager).
+
+---
+
+## 20) API surface (example endpoints)
+
+```
+POST /api/v1/auth/signup
+POST /api/v1/auth/login
+POST /api/v1/resumes/upload  -> returns resume_id
+GET  /api/v1/resumes/:id
+POST /api/v1/jobs/capture -> send job text & metadata, returns job_id
+POST /api/v1/generate/resume -> body: {user_id,resume_id,job_id,options}, returns generation_id
+GET  /api/v1/generate/:id/status
+GET  /api/v1/generate/:id/download -> presigned URL
+POST /api/v1/generate/coverletter -> returns text or file
+GET  /api/v1/user/usage
+POST /api/v1/webhook/stripe
+```
+
+**Generation request payload (example)**
+
+```json
+{
+  "user_id": "...",
+  "resume_id": "...",
+  "job_id": "...",
+  "options": {"format":"pdf","include_coverletter":true}
+}
+```
+
+**Generation response (initial)**
+
+```json
+{ "generation_id":"...", "status":"queued", "estimated_size_kb": 40 }
+```
+
+---
+

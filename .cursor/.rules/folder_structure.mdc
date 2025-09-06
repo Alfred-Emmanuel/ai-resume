@@ -1,0 +1,61 @@
+---
+alwaysApply: true
+---
+ai-resume-app/
+│
+├── apps/                               # All main apps live here
+│   ├── backend/                        # Node.js backend (API + AI service)
+│   │   ├── src/
+│   │   │   ├── routes/                 # Express/NestJS routes
+│   │   │   ├── controllers/            # Business logic
+│   │   │   ├── services/               # AI, Resume, Auth services
+│   │   │   ├── models/                 # Database models (User, Resume, Job, Subscription)
+│   │   │   ├── utils/                  # Helpers (PDF/DOCX exports, validation)
+│   │   │   ├── middlewares/            # Auth, logging, error handling
+│   │   │   ├── index.ts                # App entry point
+│   │   ├── tests/                      # Jest/Supertest API tests
+│   │   ├── Dockerfile                  # Containerization
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── website/                        # Next.js frontend (user dashboard + landing page)
+│   │   ├── src/
+│   │   │   ├── pages/                  # Next.js routes
+│   │   │   ├── components/             # Reusable UI
+│   │   │   ├── features/               # Auth, Resume upload, Subscription
+│   │   │   ├── hooks/                  # Custom React hooks
+│   │   │   ├── utils/                  # Helpers
+│   │   │   ├── styles/                 # Tailwind config, global CSS
+│   │   ├── public/                     # Assets (logos, icons)
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── extension/                      # Browser extension
+│   │   ├── src/
+│   │   │   ├── content/                # Content scripts (scrape job descriptions)
+│   │   │   ├── background/             # Background service worker
+│   │   │   ├── popup/                  # Popup React UI
+│   │   │   ├── utils/                  # Shared helpers (API calls, storage)
+│   │   │   ├── manifest.json           # Manifest V3 config
+│   │   ├── dist/                       # Compiled build
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│
+├── packages/                           # Shared code across apps
+│   ├── types/                          # Shared TypeScript types (User, Resume, Job)
+│   │   ├── index.ts
+│   │   └── package.json
+│   │
+│   ├── utils/                          # Shared utility functions (validators, API SDK)
+│   │   ├── index.ts
+│   │   └── package.json
+│
+├── .github/                            # GitHub Actions CI/CD pipelines
+│
+├── docs/                               # Project docs (design decisions, API contracts)
+│
+├── package.json                        # Root config (pnpm workspaces / Turborepo)
+├── pnpm-workspace.yaml                 # Defines workspaces
+├── turbo.json                          # Turborepo build pipeline (optional)
+├── tsconfig.base.json                  # Base TS config for all apps
+└── README.md
