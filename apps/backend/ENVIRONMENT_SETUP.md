@@ -16,6 +16,15 @@ DATABASE_URL=postgresql://username:password@localhost:5432/ai_resume_db
 FIREBASE_PROJECT_ID=your-firebase-project-id
 FIREBASE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"your-project-id",...}
 
+# Storage Configuration (MinIO for local development)
+STORAGE_TYPE=minio
+MINIO_ENDPOINT=localhost
+MINIO_PORT=9000
+MINIO_USE_SSL=false
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+MINIO_BUCKET_NAME=ai-resume-files
+
 # JWT Configuration (for any custom tokens if needed)
 JWT_SECRET=your-jwt-secret-key
 
@@ -63,3 +72,39 @@ CREATE DATABASE ai_resume_db;
 ```
 
 The application will automatically create the required tables on startup.
+
+## Storage Setup (MinIO)
+
+For local development, you can use MinIO (S3-compatible storage):
+
+### Option 1: Using Docker Compose
+
+The project includes a `docker-compose.yml` file that sets up MinIO:
+
+```bash
+docker-compose up minio
+```
+
+### Option 2: Manual MinIO Setup
+
+1. Download MinIO from https://min.io/download
+2. Start MinIO server:
+
+```bash
+minio server /path/to/data --console-address ":9001"
+```
+
+3. Access MinIO console at http://localhost:9001
+4. Default credentials: minioadmin / minioadmin
+
+### Option 3: Production (AWS S3)
+
+For production, set these environment variables:
+
+```bash
+STORAGE_TYPE=s3
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_REGION=us-east-1
+S3_BUCKET_NAME=your-bucket-name
+```

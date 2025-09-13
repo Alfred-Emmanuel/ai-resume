@@ -1,13 +1,5 @@
 import { db } from "../config/database.js";
-
-export interface User {
-  id: string;
-  firebase_uid: string;
-  email: string;
-  email_verified: boolean;
-  created_at: Date;
-  updated_at: Date;
-}
+import { User } from "../types/index.js";
 
 export const createOrGetUser = async (
   firebaseUid: string,

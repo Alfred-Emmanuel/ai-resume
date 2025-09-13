@@ -6,18 +6,17 @@ if (!admin.apps.length) {
     ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
     : undefined;
 
-  if (!serviceAccount) {
-    throw new Error(
-      "FIREBASE_SERVICE_ACCOUNT_KEY environment variable is required"
+  if (serviceAccount && process.env.FIREBASE_PROJECT_ID) {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      projectId: process.env.FIREBASE_PROJECT_ID,
+    });
+  } else {
+    console.warn(
+      "Firebase not initialized - FIREBASE_SERVICE_ACCOUNT_KEY or FIREBASE_PROJECT_ID not provided"
     );
   }
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    projectId: process.env.FIREBASE_PROJECT_ID,
-  });
 }
 
-export const auth = admin.auth();
+export const auth = admin.apps.length > 0 ? admin.auth() : null;
 export default admin;
-

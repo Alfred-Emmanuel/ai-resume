@@ -1,0 +1,74 @@
+Michael Chen
+michael.chen@devmail.com
+555-987-6543
+michaelchen.dev
+Seattle, WA
+
+ABOUT
+
+Full-stack developer specializing in modern web technologies and cloud architecture.
+Passionate about creating efficient, scalable solutions and contributing to open-source projects.
+Strong advocate for clean code and agile development practices.
+
+EMPLOYMENT HISTORY
+
+Lead Developer - CloudTech Inc - 2022-Present
+• Architected microservices platform serving 500K+ daily active users
+• Led team of 5 developers in implementing new features and optimizations
+• Established coding standards and review processes
+• Reduced infrastructure costs by 25% through optimization
+
+Senior Full-Stack Developer - WebFlow Systems - 2020-2022
+• Developed responsive web applications using React and Vue.js
+• Built RESTful APIs with Node.js and Python Django
+• Implemented automated testing reducing bugs by 40%
+• Collaborated with UX designers to improve user experience
+
+Frontend Developer - Digital Agency - 2018-2020
+• Created pixel-perfect UI components using React and TypeScript
+• Optimized website performance achieving 95+ Lighthouse scores
+• Integrated third-party APIs and payment systems
+• Maintained and updated legacy codebases
+
+ACADEMIC BACKGROUND
+
+Bachelor of Engineering in Software Engineering - University of Washington - 2018
+GPA: 3.6/4.0
+Focus Areas: Web Development, Database Systems, Software Architecture
+
+TECHNICAL EXPERTISE
+
+Frontend: React, Vue.js, TypeScript, HTML5, CSS3, Sass, Webpack
+Backend: Node.js, Python, Django, Express.js, FastAPI
+Databases: PostgreSQL, MongoDB, Redis, Elasticsearch
+Cloud: AWS (EC2, S3, Lambda, RDS), Google Cloud Platform
+DevOps: Docker, Kubernetes, Jenkins, GitHub Actions
+Testing: Jest, Cypress, Pytest, Unit Testing, Integration Testing
+
+PROFESSIONAL CERTIFICATIONS
+
+AWS Certified Developer Associate - Amazon Web Services - 2023
+Google Cloud Professional Cloud Developer - Google - 2022
+Certified Kubernetes Application Developer - CNCF - 2021
+
+OPEN SOURCE CONTRIBUTIONS
+
+Contributor to React.js core library (5+ merged PRs)
+Maintainer of popular npm package with 10K+ weekly downloads
+Active contributor to Vue.js ecosystem
+
+PERSONAL PROJECTS
+
+Real-time Chat Application - https://github.com/michaelchen/chat-app
+Built using React, Node.js, Socket.io, and MongoDB
+Features include real-time messaging, file sharing, and user authentication
+
+E-commerce Analytics Dashboard - https://github.com/michaelchen/analytics-dashboard
+Created using Vue.js, Python Flask, and PostgreSQL
+Provides insights into sales trends and customer behavior
+
+LANGUAGE PROFICIENCY
+
+English - Native
+Chinese (Mandarin) - Native
+Japanese - Basic

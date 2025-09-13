@@ -1,0 +1,148 @@
+// Resume controller
+import { asyncHandler, NotFoundError, AuthenticationError, } from "../utils/errors.js";
+import { sendSuccess, sendCreated } from "../utils/response.js";
+import { UploadResponseSchema, ResumeResponseSchema, } from "../schemas/index.js";
+import { createResume, getResumeById, getResumesByUserId, updateResumeCanonicalJson, } from "../services/resume.js";
+import { getUserByFirebaseUid } from "../services/user.js";
+import { createStorageService } from "../services/storage.js";
+import { validateResumeFile, sanitizeFilename, } from "../utils/fileValidation.js";
+import { textExtractionService } from "../services/textExtraction.js";
+import { simpleResumeParser } from "../services/simpleResumeParser.js";
+import { Logger } from "../utils/logger.js";
+export const uploadResume = asyncHandler(async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+    }
+    if (!req.user) {
+        throw new AuthenticationError("User not authenticated");
+    }
+    // Validate file
+    const validation = validateResumeFile(req.file);
+    if (!validation.isValid) {
+        return res.status(400).json({ error: validation.error });
+    }
+    // Get user from database
+    const user = await getUserByFirebaseUid(req.user.uid);
+    if (!user) {
+        throw new NotFoundError("User");
+    }
+    // Sanitize filename
+    const sanitizedFilename = sanitizeFilename(req.file.originalname);
+    // Upload file to storage
+    const storageService = createStorageService();
+    const fileKey = await storageService.uploadFile(req.file.buffer, sanitizedFilename, validation.contentType);
+    // Save resume record to database
+    const resume = await createResume({
+        user_id: user.id,
+        file_key: fileKey,
+    });
+    // Extract text and parse resume in the background
+    try {
+        // Extract text from the uploaded file
+        const extractedText = await textExtractionService.extractText(req.file.buffer, validation.contentType);
+        // Parse the extracted text into raw sections
+        const rawSections = simpleResumeParser.parseResume(extractedText.text);
+        // Update the resume with the raw sections
+        await updateResumeCanonicalJson(resume.id, rawSections);
+        Logger.info("Resume processing completed", {
+            resumeId: resume.id,
+            textLength: extractedText.text.length,
+            sectionsFound: Object.keys(rawSections).length,
+            sections: Object.keys(rawSections),
+        });
+    }
+    catch (error) {
+        Logger.error("Resume processing failed", {
+            resumeId: resume.id,
+            error: error instanceof Error ? error.message : "Unknown error",
+        });
+        // Don't fail the upload if parsing fails - user can still access the file
+    }
+    const response = UploadResponseSchema.parse({
+        resume_id: resume.id,
+        file_key: resume.file_key,
+        filename: sanitizedFilename,
+    });
+    return sendCreated(res, response, "Resume uploaded successfully");
+});
+export const getResume = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!req.user) {
+        throw new AuthenticationError("User not authenticated");
+    }
+    // Get user from database
+    const user = await getUserByFirebaseUid(req.user.uid);
+    if (!user) {
+        throw new NotFoundError("User");
+    }
+    // Get resume
+    const resume = await getResumeById(id);
+    if (!resume) {
+        throw new NotFoundError("Resume");
+    }
+    // Check if resume belongs to user
+    if (resume.user_id !== user.id) {
+        return res.status(403).json({ error: "Access denied" });
+    }
+    const response = ResumeResponseSchema.parse({
+        id: resume.id,
+        user_id: resume.user_id,
+        file_key: resume.file_key,
+        canonical_json: resume.canonical_json,
+        created_at: resume.created_at.toISOString(),
+        updated_at: resume.updated_at.toISOString(),
+    });
+    return sendSuccess(res, response);
+});
+export const getResumes = asyncHandler(async (req, res) => {
+    if (!req.user) {
+        throw new AuthenticationError("User not authenticated");
+    }
+    // Get user from database
+    const user = await getUserByFirebaseUid(req.user.uid);
+    if (!user) {
+        throw new NotFoundError("User");
+    }
+    // Get user's resumes
+    const resumes = await getResumesByUserId(user.id);
+    const response = resumes.map((resume) => ResumeResponseSchema.parse({
+        id: resume.id,
+        user_id: resume.user_id,
+        file_key: resume.file_key,
+        canonical_json: resume.canonical_json,
+        created_at: resume.created_at.toISOString(),
+        updated_at: resume.updated_at.toISOString(),
+    }));
+    return sendSuccess(res, response);
+});
+export const updateResumeSections = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { sections } = req.body;
+    if (!req.user) {
+        throw new AuthenticationError("User not authenticated");
+    }
+    if (!sections || typeof sections !== "object") {
+        return res.status(400).json({
+            success: false,
+            error: "Invalid sections data",
+        });
+    }
+    // Get the resume to verify ownership
+    const resume = await getResumeById(id);
+    if (!resume) {
+        throw new NotFoundError("Resume not found");
+    }
+    // Verify ownership
+    const user = await getUserByFirebaseUid(req.user.uid);
+    if (!user || resume.user_id !== user.id) {
+        throw new AuthenticationError("Not authorized to update this resume");
+    }
+    // Update the resume with the edited sections
+    await updateResumeCanonicalJson(resume.id, sections);
+    Logger.info("Resume sections updated", {
+        resumeId: resume.id,
+        userId: user.id,
+        sectionsUpdated: Object.keys(sections).length,
+    });
+    return sendSuccess(res, { success: true }, "Resume sections updated successfully");
+});

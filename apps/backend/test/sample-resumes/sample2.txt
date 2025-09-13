@@ -1,0 +1,65 @@
+Sarah Johnson
+sarah.johnson@techmail.com
++1 (555) 987-6543
+https://linkedin.com/in/sarahjohnson
+San Francisco, CA
+
+PROFESSIONAL SUMMARY
+
+Results-driven data scientist with 4+ years of experience in machine learning and analytics.
+Expertise in Python, R, and statistical modeling. Proven track record of delivering insights
+that drive business decisions and improve operational efficiency.
+
+WORK EXPERIENCE
+
+Data Scientist - DataCorp Solutions - 2021-Present
+• Developed machine learning models for customer churn prediction (85% accuracy)
+• Analyzed large datasets using Python, Pandas, and Scikit-learn
+• Created interactive dashboards using Tableau and Power BI
+• Collaborated with product team to implement data-driven features
+
+Analytics Engineer - TechStart Inc - 2019-2021
+• Built ETL pipelines processing 10TB+ of data daily
+• Designed and implemented data warehouse using Snowflake
+• Automated reporting processes reducing manual work by 70%
+• Mentored 2 junior analysts on best practices
+
+Data Analyst Intern - MarketingPro - 2018-2019
+• Performed statistical analysis on marketing campaign data
+• Created visualizations using Python matplotlib and seaborn
+• Assisted in A/B testing design and analysis
+
+EDUCATION
+
+Master of Science in Data Science - Stanford University - 2018
+GPA: 3.9/4.0
+Thesis: "Deep Learning Approaches for Time Series Forecasting"
+
+Bachelor of Science in Mathematics - UC Berkeley - 2016
+GPA: 3.7/4.0
+Minor: Computer Science
+
+TECHNICAL SKILLS
+
+Programming: Python, R, SQL, JavaScript
+Machine Learning: Scikit-learn, TensorFlow, PyTorch, XGBoost
+Data Visualization: Tableau, Power BI, Matplotlib, Seaborn, Plotly
+Databases: PostgreSQL, MySQL, MongoDB, Snowflake
+Cloud Platforms: AWS, Google Cloud Platform, Azure
+Tools: Git, Docker, Jupyter Notebook, Apache Airflow
+
+CERTIFICATIONS
+
+AWS Certified Machine Learning Specialty - Amazon Web Services - 2022
+Google Cloud Professional Data Engineer - Google - 2021
+Tableau Desktop Specialist - Tableau - 2020
+
+PUBLICATIONS
+
+"Advanced Time Series Forecasting Using LSTM Networks" - Journal of Data Science (2022)
+"Customer Segmentation Using Unsupervised Learning" - Data Mining Conference (2021)
+
+LANGUAGES
+
+English - Native
+Mandarin - Conversational

@@ -1,30 +1,33 @@
 import { Router } from "express";
-import { z } from "zod";
-import type { UUID } from "@ai-resume/types";
+import multer from "multer";
+import { verifyFirebaseToken } from "../middleware/auth.js";
+import {
+  uploadResume,
+  getResume,
+  getResumes,
+  updateResumeSections,
+  deleteResumeController,
+} from "../controllers/resumeController.js";
+import { FILE_UPLOAD } from "../constants/index.js";
 
 export const router = Router();
 
-const UploadResponse = z.object({ resume_id: z.string() });
-
-router.post("/upload", (_req, res) => {
-  const id: UUID = cryptoRandom();
-  const payload = { resume_id: id };
-  return res.status(201).json(UploadResponse.parse(payload));
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: FILE_UPLOAD.MAX_SIZE,
+  },
 });
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  return res.json({
-    id,
-    filename: "resume.docx",
-    uploadedAt: new Date().toISOString(),
-  });
-});
-
-function cryptoRandom(): UUID {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
+// Routes
+router.post(
+  "/upload",
+  verifyFirebaseToken,
+  upload.single("resume"),
+  uploadResume as any
+);
+router.put("/:id/sections", verifyFirebaseToken, updateResumeSections as any);
+router.get("/:id", verifyFirebaseToken, getResume as any);
+router.get("/", verifyFirebaseToken, getResumes as any);
+router.delete("/:id", verifyFirebaseToken, deleteResumeController as any);

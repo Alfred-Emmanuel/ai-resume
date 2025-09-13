@@ -1,0 +1,66 @@
+John Doe
+john.doe@email.com
+(555) 123-4567
+https://linkedin.com/in/johndoe
+New York, NY
+
+SUMMARY
+
+Experienced software engineer with 5+ years of experience in full-stack development.
+Passionate about building scalable applications and leading technical teams.
+Strong background in JavaScript, Python, and cloud technologies.
+
+EXPERIENCE
+
+Senior Software Engineer - Tech Corp - 2020-2023
+• Led development of microservices architecture serving 1M+ users
+• Improved system performance by 40% through optimization
+• Mentored 3 junior developers and conducted code reviews
+• Implemented CI/CD pipelines reducing deployment time by 60%
+
+Software Engineer - Startup Inc - 2018-2020
+• Developed REST APIs using Node.js and Express
+• Implemented CI/CD pipelines using Jenkins and Docker
+• Collaborated with cross-functional teams in Agile environment
+• Reduced API response time by 30% through caching strategies
+
+Junior Developer - Web Solutions - 2017-2018
+• Built responsive web applications using React and JavaScript
+• Participated in daily standups and sprint planning
+• Fixed bugs and implemented new features based on requirements
+
+EDUCATION
+
+Bachelor of Science in Computer Science - University of Technology - 2017
+GPA: 3.8/4.0
+Relevant Coursework: Data Structures, Algorithms, Database Systems, Software Engineering
+
+SKILLS
+
+Programming Languages: JavaScript, TypeScript, Python, Java, C++
+Frameworks & Libraries: React, Node.js, Express, Django, Spring Boot
+Databases: PostgreSQL, MongoDB, Redis
+Cloud & DevOps: AWS, Docker, Kubernetes, Jenkins, Git
+Tools: VS Code, IntelliJ IDEA, Postman, Jira
+
+CERTIFICATIONS
+
+AWS Certified Solutions Architect - Amazon Web Services - 2022
+Certified Kubernetes Administrator - Cloud Native Computing Foundation - 2021
+Google Cloud Professional Developer - Google - 2020
+
+PROJECTS
+
+E-commerce Platform - https://github.com/johndoe/ecommerce
+Built a full-stack e-commerce application using React, Node.js, and PostgreSQL
+Features include user authentication, payment processing, and inventory management
+
+Task Management App - https://github.com/johndoe/taskapp
+Developed a collaborative task management tool with real-time updates
+Used WebSocket for live collaboration and React for frontend
+
+LANGUAGES
+
+English - Native
+Spanish - Fluent
+French - Intermediate
