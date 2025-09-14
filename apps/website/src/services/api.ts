@@ -182,6 +182,66 @@ class ApiService {
   async getPDFParserStatus(): Promise<ApiResponse<any>> {
     return this.request("/pdf-parser/status");
   }
+
+  // Generation endpoints
+  async generateResume(
+    resumeId: string,
+    jobId: string,
+    options: {
+      preview_only?: boolean;
+      format?: string;
+      includeCoverLetter?: boolean;
+    },
+    token: string
+  ): Promise<ApiResponse<any>> {
+    return this.authenticatedRequest("/generate/resume", token, {
+      method: "POST",
+      body: JSON.stringify({
+        resume_id: resumeId,
+        job_id: jobId,
+        options,
+      }),
+    });
+  }
+
+  async generateCoverLetter(
+    resumeId: string,
+    jobId: string,
+    options: { preview_only?: boolean },
+    token: string
+  ): Promise<ApiResponse<any>> {
+    return this.authenticatedRequest("/generate/coverletter", token, {
+      method: "POST",
+      body: JSON.stringify({
+        resume_id: resumeId,
+        job_id: jobId,
+        options,
+      }),
+    });
+  }
+
+  // Job endpoints
+  async getJobs(token: string): Promise<ApiResponse<any[]>> {
+    return this.authenticatedRequest<any[]>("/jobs/", token);
+  }
+
+  async captureJob(
+    jobData: {
+      title: string;
+      company?: string;
+      location?: string;
+      source?: string;
+      rawText: string;
+      description?: string;
+      url?: string;
+    },
+    token: string
+  ): Promise<ApiResponse<any>> {
+    return this.authenticatedRequest("/jobs/capture", token, {
+      method: "POST",
+      body: JSON.stringify(jobData),
+    });
+  }
 }
 
 // Export singleton instance

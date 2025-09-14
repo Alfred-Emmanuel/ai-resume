@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { AuthForm } from "../components/auth/AuthForm";
+import ResumeSelector from "../components/resume/ResumeSelector";
+import JobSelector from "../components/jobs/JobSelector";
+import GenerationPreview from "../components/generation/GenerationPreview";
 
 export function Popup() {
   const { user, loading, logout } = useAuth();
   const [status, setStatus] = useState<string>("");
   const [jobText, setJobText] = useState<string>("");
+  const [currentView, setCurrentView] = useState<
+    "main" | "resume-selector" | "job-selector" | "generation-preview"
+  >("main");
+  const [selectedResumeId, setSelectedResumeId] = useState<string | null>(null);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
 
   const capture = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -28,6 +36,41 @@ export function Popup() {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  const handleGenerateResume = () => {
+    setCurrentView("resume-selector");
+  };
+
+  const handleResumeSelected = (resumeId: string) => {
+    setSelectedResumeId(resumeId);
+    setCurrentView("job-selector");
+  };
+
+  const handleJobSelected = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setCurrentView("generation-preview");
+  };
+
+  const handleBackToMain = () => {
+    setCurrentView("main");
+    setSelectedResumeId(null);
+    setSelectedJobId(null);
+  };
+
+  const handleBackToResumeSelector = () => {
+    setCurrentView("resume-selector");
+    setSelectedJobId(null);
+  };
+
+  const handleBackToJobSelector = () => {
+    setCurrentView("job-selector");
+  };
+
+  const handleApprovedGeneration = (generatedText: string) => {
+    console.log("Approved generation:", generatedText);
+    setStatus("Generation approved!");
+    handleBackToMain();
   };
 
   if (loading) {
@@ -53,6 +96,41 @@ export function Popup() {
     );
   }
 
+  // Render different views based on current state
+  if (currentView === "resume-selector") {
+    return (
+      <ResumeSelector
+        onResumeSelected={handleResumeSelected}
+        onBack={handleBackToMain}
+      />
+    );
+  }
+
+  if (currentView === "job-selector") {
+    return (
+      <JobSelector
+        onJobSelected={handleJobSelected}
+        onBack={handleBackToResumeSelector}
+      />
+    );
+  }
+
+  if (
+    currentView === "generation-preview" &&
+    selectedResumeId &&
+    selectedJobId
+  ) {
+    return (
+      <GenerationPreview
+        resumeId={selectedResumeId}
+        jobId={selectedJobId}
+        onBack={handleBackToJobSelector}
+        onApproved={handleApprovedGeneration}
+      />
+    );
+  }
+
+  // Main view
   return (
     <div style={{ width: 320, padding: 12, fontFamily: "sans-serif" }}>
       <div
@@ -101,6 +179,23 @@ export function Popup() {
         Capture Job Description
       </button>
 
+      <button
+        onClick={handleGenerateResume}
+        style={{
+          width: "100%",
+          padding: "8px",
+          backgroundColor: "#28a745",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          fontSize: "14px",
+          cursor: "pointer",
+          marginBottom: 8,
+        }}
+      >
+        Generate Resume/Cover Letter
+      </button>
+
       <div style={{ marginTop: 8, color: "#555", fontSize: 12 }}>{status}</div>
 
       {jobText && (
@@ -118,24 +213,6 @@ export function Popup() {
           value={jobText}
           readOnly
         />
-      )}
-
-      {jobText && (
-        <button
-          style={{
-            width: "100%",
-            padding: "8px",
-            backgroundColor: "#28a745",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            fontSize: "14px",
-            cursor: "pointer",
-            marginTop: 8,
-          }}
-        >
-          Generate Resume
-        </button>
       )}
     </div>
   );

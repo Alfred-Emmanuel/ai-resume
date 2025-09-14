@@ -1,0 +1,18 @@
+FROM node:20-bookworm
+
+ENV PNPM_HOME=/usr/local/share/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable && corepack prepare pnpm@9.6.0 --activate
+
+WORKDIR /app
+
+# Copy everything first (simpler approach for development)
+COPY . .
+
+# Install all dependencies
+RUN pnpm install
+
+EXPOSE 3001
+
+# Use tsx for hot reloading
+CMD ["pnpm", "--filter", "@ai-resume/backend", "dev"]

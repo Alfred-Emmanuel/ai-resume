@@ -1,29 +1,38 @@
 import { Router } from "express";
-import { z } from "zod";
-import type { UUID } from "@ai-resume/types";
+import { jobController } from "../controllers/jobController.js";
+import { verifyFirebaseToken } from "../middleware/auth.js";
 
 export const router = Router();
 
-const CaptureSchema = z.object({
-  title: z.string().min(1),
-  company: z.string().optional(),
-  location: z.string().optional(),
-  source: z.enum(["linkedin", "indeed", "other"]).optional(),
-  rawText: z.string().min(1),
-});
+// Apply authentication middleware to all job routes
+router.use(verifyFirebaseToken);
 
+// Job capture endpoint
 router.post("/capture", (req, res) => {
-  const parsed = CaptureSchema.safeParse(req.body);
-  if (!parsed.success)
-    return res.status(400).json({ error: "Invalid payload" });
-  const id: UUID = cryptoRandom();
-  return res.status(201).json({ job_id: id });
+  jobController.captureJob(req, res);
 });
 
-function cryptoRandom(): UUID {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
+// Get specific job
+router.get("/:id", (req, res) => {
+  jobController.getJob(req, res);
+});
+
+// Get all jobs for user (with pagination)
+router.get("/", (req, res) => {
+  jobController.getJobs(req, res);
+});
+
+// Update job
+router.put("/:id", (req, res) => {
+  jobController.updateJob(req, res);
+});
+
+// Delete job
+router.delete("/:id", (req, res) => {
+  jobController.deleteJob(req, res);
+});
+
+// Search jobs
+router.get("/search", (req, res) => {
+  jobController.searchJobs(req, res);
+});

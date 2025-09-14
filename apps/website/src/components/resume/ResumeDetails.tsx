@@ -3,6 +3,8 @@ import { Resume } from "../../types";
 import Button from "../ui/Button";
 import { apiService } from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
+import JobSelector from "../jobs/JobSelector";
+import GenerationPreview from "../generation/GenerationPreview";
 
 interface ResumeDetailsProps {
   resume: Resume;
@@ -22,6 +24,9 @@ const ResumeDetails: React.FC<ResumeDetailsProps> = ({ resume, onBack }) => {
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const [showJobSelector, setShowJobSelector] = useState(false);
+  const [showGenerationPreview, setShowGenerationPreview] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
 
   useEffect(() => {
     // Initialize sections from canonical_json
@@ -71,6 +76,36 @@ const ResumeDetails: React.FC<ResumeDetailsProps> = ({ resume, onBack }) => {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleGenerateResume = () => {
+    setShowJobSelector(true);
+  };
+
+  const handleJobSelected = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setShowJobSelector(false);
+    setShowGenerationPreview(true);
+  };
+
+  const handleBackFromJobSelector = () => {
+    setShowJobSelector(false);
+  };
+
+  const handleBackFromGeneration = () => {
+    setShowGenerationPreview(false);
+    setSelectedJobId(null);
+  };
+
+  const handleApprovedGeneration = (generatedText: string) => {
+    // TODO: Implement saving the approved generated text
+    console.log("Approved generation:", generatedText);
+    setShowGenerationPreview(false);
+    setSelectedJobId(null);
+    setMessage({
+      type: "success",
+      text: "Generated content has been approved and saved!",
+    });
   };
 
   const rawText = (resume.canonical_json as any)?.full_text as
@@ -174,6 +209,26 @@ const ResumeDetails: React.FC<ResumeDetailsProps> = ({ resume, onBack }) => {
     );
   };
 
+  if (showJobSelector) {
+    return (
+      <JobSelector
+        onJobSelected={handleJobSelected}
+        onBack={handleBackFromJobSelector}
+      />
+    );
+  }
+
+  if (showGenerationPreview && selectedJobId) {
+    return (
+      <GenerationPreview
+        resume={resume}
+        jobId={selectedJobId}
+        onBack={handleBackFromGeneration}
+        onApproved={handleApprovedGeneration}
+      />
+    );
+  }
+
   if (!resume.canonical_json) {
     return (
       <div className="bg-white rounded-lg shadow">
@@ -226,13 +281,22 @@ const ResumeDetails: React.FC<ResumeDetailsProps> = ({ resume, onBack }) => {
                 </Button>
               </>
             ) : (
-              <Button
-                onClick={() => setEditing(true)}
-                variant="primary"
-                size="sm"
-              >
-                Edit Raw Text
-              </Button>
+              <>
+                <Button
+                  onClick={handleGenerateResume}
+                  variant="primary"
+                  size="sm"
+                >
+                  Generate Resume
+                </Button>
+                <Button
+                  onClick={() => setEditing(true)}
+                  variant="secondary"
+                  size="sm"
+                >
+                  Edit Raw Text
+                </Button>
+              </>
             )}
             <Button onClick={onBack} variant="secondary" size="sm">
               Back to Resumes

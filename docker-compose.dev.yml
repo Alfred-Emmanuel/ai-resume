@@ -1,0 +1,115 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: resume-postgres-dev
+    restart: always
+    env_file:
+      - apps/backend/.env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-resume_app}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    networks:
+      - resume-network
+
+  redis:
+    image: redis:7
+    container_name: resume-redis-dev
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - resume-network
+
+  minio:
+    image: minio/minio
+    container_name: resume-minio-dev
+    command: server /data --console-address ":9001"
+    env_file:
+      - apps/backend/.env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio123}
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # MinIO web console
+    volumes:
+      - minio_data_dev:/data
+    networks:
+      - resume-network
+
+  pdf-parser:
+    build:
+      context: ./pdf-parser-service
+      dockerfile: Dockerfile
+    container_name: resume-pdf-parser-dev
+    restart: always
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - resume-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile.dev
+    container_name: resume-backend-dev
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+      - minio
+      - pdf-parser
+    env_file:
+      - apps/backend/.env
+    environment:
+      NODE_ENV: development
+      PORT: ${PORT:-3001}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASS: ${DB_PASS:-postgres}
+      DB_NAME: ${DB_NAME:-ai-resume}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio123}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-minio}
+      MINIO_PORT: ${MINIO_PORT:-9000}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minio123}
+      JWT_SECRET: ${JWT_SECRET:-changeme}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      PDF_PARSER_SERVICE_URL: ${PDF_PARSER_SERVICE_URL:-http://pdf-parser:8000}
+    ports:
+      - "3001:3001"
+    volumes:
+      # Mount source code for hot reloading
+      - ./apps/backend/src:/app/apps/backend/src
+      - ./packages:/app/packages
+      - ./apps/backend/package.json:/app/apps/backend/package.json
+      - ./apps/backend/tsconfig.json:/app/apps/backend/tsconfig.json
+      - ./package.json:/app/package.json
+      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./tsconfig.base.json:/app/tsconfig.base.json
+      - ./turbo.json:/app/turbo.json
+    networks:
+      - resume-network
+
+volumes:
+  pgdata_dev:
+  minio_data_dev:
+
+networks:
+  resume-network:
+    driver: bridge

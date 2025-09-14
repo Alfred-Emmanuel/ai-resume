@@ -1,6 +1,6 @@
 // Application constants
 
-export const API_BASE_URL = "http://localhost:5000/api/v1";
+export const API_BASE_URL = "http://localhost:3001/api/v1";
 
 export const FILE_UPLOAD = {
   MAX_SIZE: 10 * 1024 * 1024, // 10MB
